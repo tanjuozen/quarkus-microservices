@@ -1,16 +1,33 @@
 package com.tanzhu.quarkus.microservices;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import com.tanzhu.quarkus.microservices.model.Ticket;
+import com.tanzhu.quarkus.microservices.service.TicketService;
 
-@Path("/hello")
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.List;
+
+@Path("/tickets")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class ExampleResource {
 
+
+    private final TicketService ticketService;
+
+    public ExampleResource(TicketService ticketService) {
+        this.ticketService = ticketService;
+    }
+
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        return "Hello tanzhu";
+    public List<Ticket> getAll() {
+        return ticketService.listAllTickets();
+    }
+
+    @POST
+    public Response createTicket(Ticket ticket) {
+        ticketService.createTicket(ticket);
+        return Response.status(Response.Status.CREATED).build();
     }
 }
