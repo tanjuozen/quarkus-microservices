@@ -4,10 +4,11 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(name = "OrderIdAndStatus", columnNames = {"orderId", "status"}))
-public class Ticket extends PanacheEntityBase {
+@Table(uniqueConstraints = @UniqueConstraint(name = "CorrelationIdAndEvent", columnNames = {"correlationId", "event"}))
+public class TicketEvent  extends PanacheEntityBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,24 +16,20 @@ public class Ticket extends PanacheEntityBase {
     public Long id;
 
     @Column(nullable = false)
-    public String orderId;
+    public String correlationId;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    public TicketStatus status;
+    public Long itemId;
 
     @Column(nullable = false)
     public String accountId;
 
-    public String name;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    public TicketEventType event;
 
-    public String numberOfPersons;
+    @Column(nullable = false)
+    public BigDecimal totalCost;
 
-    public BigDecimal cost;
-
-    @Transient
-    public String messageOnTicket;
-
-    @Transient
-    public String messageSeverity;
+    public Instant createdOn;
 }
