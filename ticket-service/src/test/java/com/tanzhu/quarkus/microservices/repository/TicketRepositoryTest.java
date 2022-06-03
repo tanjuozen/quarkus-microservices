@@ -28,7 +28,7 @@ class TicketRepositoryTest {
 
         // then
         assertTrue(repository.isPersistent(ticket));
-        assertNotNull(ticket.id);
+        assertNotNull(ticket.getId());
         assertEquals(1, repository.count());
     }
 
@@ -45,9 +45,9 @@ class TicketRepositoryTest {
 
         // then
         assertEquals(2, repository.count());
-        assertNotNull(actual.id);
-        assertEquals("newAccountId", actual.accountId);
-        assertEquals(TicketStatus.TICKET_BOOKING_PENDING, actual.status);
+        assertNotNull(actual.getId());
+        assertEquals("newAccountId", actual.getAccountId());
+        assertEquals(TicketStatus.TICKET_BOOKING_PENDING, actual.getStatus());
     }
 
     @Test
@@ -73,9 +73,9 @@ class TicketRepositoryTest {
         Ticket actual = repository.findByOrderIdAndState("newOrderId", TicketStatus.TICKET_BOOKING_APPROVED);
 
         // then
-        assertNotNull(actual.id);
-        assertEquals("newAccountId", actual.accountId);
-        assertEquals(TicketStatus.TICKET_BOOKING_APPROVED, actual.status);
+        assertNotNull(actual.getId());
+        assertEquals("newAccountId", actual.getAccountId());
+        assertEquals(TicketStatus.TICKET_BOOKING_APPROVED, actual.getStatus());
         assertEquals(2, repository.count());
     }
 
@@ -93,10 +93,10 @@ class TicketRepositoryTest {
 
     private Ticket generateDummyTicketWith(String orderId, String accountId, TicketStatus status, String name) {
         Ticket ticket = new Ticket();
-        ticket.orderId = orderId;
-        ticket.accountId = accountId;
-        ticket.status = status;
-        ticket.name = name;
+        ticket.setOrderId(orderId);
+        ticket.setAccountId(accountId);
+        ticket.setStatus(status);
+        ticket.setName(name);
         return ticket;
     }
 }

@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Liveness
 @ApplicationScoped
-public class MyLivenessCheck implements HealthCheck {
+public class TicketServiceLivenessCheck implements HealthCheck {
 
     @Override
     public HealthCheckResponse call() {

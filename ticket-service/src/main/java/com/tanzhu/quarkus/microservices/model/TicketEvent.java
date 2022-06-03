@@ -13,23 +13,79 @@ public class TicketEvent  extends PanacheEntityBase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
-    public Long id;
+    private Long id;
 
     @Column(nullable = false)
-    public String correlationId;
+    private String correlationId;
 
     @Column(nullable = false)
-    public Long itemId;
+    private Long itemId;
 
     @Column(nullable = false)
-    public String accountId;
+    private String accountId;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    public TicketEventType event;
+    private TicketEventType event;
 
     @Column(nullable = false)
-    public BigDecimal totalCost;
+    private BigDecimal totalCost;
 
-    public Instant createdOn;
+    private Instant createdOn;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCorrelationId() {
+        return correlationId;
+    }
+
+    public void setCorrelationId(String correlationId) {
+        this.correlationId = correlationId;
+    }
+
+    public Long getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
+    }
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
+    }
+
+    public TicketEventType getEvent() {
+        return event;
+    }
+
+    public void setEvent(TicketEventType event) {
+        this.event = event;
+    }
+
+    public BigDecimal getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(BigDecimal totalCost) {
+        this.totalCost = totalCost;
+    }
+
+    public Instant getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(Instant createdOn) {
+        this.createdOn = createdOn;
+    }
 }

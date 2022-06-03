@@ -7,7 +7,6 @@ import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
-import java.util.List;
 
 @ApplicationScoped
 public class TicketService {
@@ -21,6 +20,6 @@ public class TicketService {
 
     @Transactional
     public void bookTicket(Ticket ticket) {
-        log.info("Booking a ticket for the order: " + ticket.orderId);
+        log.info("Booking a ticket for the order: " + ticket.getAccountId());
     }
 }
