@@ -70,7 +70,7 @@ class TicketRepositoryTest {
         repository.persist(someTicket);
 
         // when
-        Ticket actual = repository.findByOrderIdAndState("newOrderId", TicketStatus.TICKET_BOOKING_APPROVED);
+        Ticket actual = repository.findByOrderAndState("newOrderId", TicketStatus.TICKET_BOOKING_APPROVED);
 
         // then
         assertNotNull(actual.getId());
@@ -80,7 +80,7 @@ class TicketRepositoryTest {
     }
 
     @Test
-    void findByOrderIdAndState_NotFound() {
+    void findByOrderAndState_NotFound() {
         Ticket ticket = generateDummyTicketWith("newOrderId", "newAccountId", TicketStatus.TICKET_BOOKING_APPROVED, "newName");
         Ticket someTicket = generateDummyTicketWith("someOrderId", "someAccountId", TicketStatus.TICKET_PAYMENT_REJECTED, "someName");
         repository.persist(ticket);
@@ -88,7 +88,7 @@ class TicketRepositoryTest {
 
         // when and then
         Assertions.assertThrows(NoResultException.class,
-                () -> repository.findByOrderIdAndState("newOrderId", TicketStatus.TICKET_BOOKING_PENDING));
+                () -> repository.findByOrderAndState("newOrderId", TicketStatus.TICKET_BOOKING_PENDING));
     }
 
     private Ticket generateDummyTicketWith(String orderId, String accountId, TicketStatus status, String name) {

@@ -9,7 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class TicketRepository implements PanacheRepository<Ticket> {
 
-    public Ticket findByOrderIdAndState(String orderId, TicketStatus status) {
+    public Ticket findByOrderAndState(String orderId, TicketStatus status) {
         return find("SELECT t FROM Ticket t where t.orderId = ?1 and t.status = ?2", orderId, status).singleResult();
     }
 
