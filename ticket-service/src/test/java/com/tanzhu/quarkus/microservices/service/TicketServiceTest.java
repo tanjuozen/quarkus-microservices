@@ -2,7 +2,6 @@ package com.tanzhu.quarkus.microservices.service;
 
 import com.tanzhu.quarkus.microservices.model.Ticket;
 import com.tanzhu.quarkus.microservices.model.TicketStatus;
-import com.tanzhu.quarkus.microservices.repository.TicketEventRepository;
 import com.tanzhu.quarkus.microservices.repository.TicketRepository;
 import com.tanzhu.quarkus.microservices.util.TestData;
 import io.quarkus.test.TestTransaction;
@@ -25,8 +24,6 @@ class TicketServiceTest {
     @Inject
     TicketRepository ticketRepository;
 
-    @Inject
-    TicketEventRepository ticketEventRepository;
 
     @Test
     void bookTicketThatDoesntExist() {
@@ -44,10 +41,6 @@ class TicketServiceTest {
         assertEquals("testName", actual.getName());
         assertEquals("1", actual.getNumberOfPersons());
         assertEquals("60.15", actual.getCost().toString());
-
-        // verify event existence
-        assertNotNull(ticketEventRepository.find("SELECT te FROM TicketEvent WHERE te.correlationId = ?1", actual.getOrderId()));
-        assertNotNull(ticketEventRepository.find("SELECT te FROM TicketEvent WHERE te.itemId = ?1", actual.getId()));
     }
 
 
@@ -75,10 +68,6 @@ class TicketServiceTest {
         assertEquals("ERROR", actual.getMessageSeverity());
         assertNotNull(actual.getMessageOnTicket());
         assertEquals("Pending booking for accountId: accountId", actual.getMessageOnTicket());
-
-        // verify event existence
-        assertNotNull(ticketEventRepository.find("SELECT te FROM TicketEvent WHERE te.correlationId = ?1", actual.getOrderId()));
-        assertNotNull(ticketEventRepository.find("SELECT te FROM TicketEvent WHERE te.itemId = ?1", actual.getId()));
     }
 
     @Test
@@ -106,9 +95,5 @@ class TicketServiceTest {
         assertEquals("ERROR", actual.getMessageSeverity());
         assertNotNull(actual.getMessageOnTicket());
         assertEquals("Already booked for orderId: orderId", actual.getMessageOnTicket());
-
-        // verify event existence
-        assertNotNull(ticketEventRepository.find("SELECT te FROM TicketEvent WHERE te.correlationId = ?1", actual.getOrderId()));
-        assertNotNull(ticketEventRepository.find("SELECT te FROM TicketEvent WHERE te.itemId = ?1", actual.getId()));
     }
 }

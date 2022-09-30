@@ -1,91 +1,54 @@
 package com.tanzhu.quarkus.microservices.model;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.debezium.outbox.quarkus.ExportedEvent;
 
-import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.Instant;
 
-@Entity
-@Table(uniqueConstraints = @UniqueConstraint(name = "CorrelationIdAndEvent", columnNames = {"correlationId", "event"}))
-public class TicketEvent  extends PanacheEntityBase {
+public class TicketEvent implements ExportedEvent<String, JsonNode> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
-    private Long id;
+    private static ObjectMapper mapper = new ObjectMapper();
+    private final String correlationId;
+    private final JsonNode ticketEvent;
+    private final Instant createdOn;
 
-    @Column(nullable = false)
-    private String correlationId;
-
-    @Column(nullable = false)
-    private Long itemId;
-
-    @Column(nullable = false)
-    private String accountId;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private TicketEventType event;
-
-    @Column(nullable = false)
-    private BigDecimal totalCost;
-
-    private Instant createdOn;
-
-    public Long getId() {
-        return id;
+    private TicketEvent(String correlationId, JsonNode ticketEvent) {
+        this.correlationId = correlationId;
+        this.createdOn = Instant.now();
+        this.ticketEvent = ticketEvent;
+    }
+    public static TicketEvent of(Ticket ticket) {
+        ObjectNode jsonTicketEvent = mapper.createObjectNode()
+                .put("accountId", ticket.getAccountId())
+                .put("itemId", ticket.getId())
+                .put("totalCost", ticket.getCost());
+        return new TicketEvent(ticket.getOrderId(), jsonTicketEvent);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCorrelationId() {
+    @Override
+    public String getAggregateId() {
         return correlationId;
     }
 
-    public void setCorrelationId(String correlationId) {
-        this.correlationId = correlationId;
+    @Override
+    public String getAggregateType() {
+        return "Ticket";
     }
 
-    public Long getItemId() {
-        return itemId;
+    @Override
+    public String getType() {
+        return TicketEventType.TICKET_CREATED.name();
     }
 
-    public void setItemId(Long itemId) {
-        this.itemId = itemId;
-    }
-
-    public String getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
-    }
-
-    public TicketEventType getEvent() {
-        return event;
-    }
-
-    public void setEvent(TicketEventType event) {
-        this.event = event;
-    }
-
-    public BigDecimal getTotalCost() {
-        return totalCost;
-    }
-
-    public void setTotalCost(BigDecimal totalCost) {
-        this.totalCost = totalCost;
-    }
-
-    public Instant getCreatedOn() {
+    @Override
+    public Instant getTimestamp() {
         return createdOn;
     }
 
-    public void setCreatedOn(Instant createdOn) {
-        this.createdOn = createdOn;
+    @Override
+    public JsonNode getPayload() {
+        return ticketEvent;
     }
 }

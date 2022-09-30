@@ -1,52 +1,19 @@
-package com.tanzhu.quarkus.microservices.model;
+package com.tanzhu.quarkus.microservices.resource.model;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import com.tanzhu.quarkus.microservices.model.TicketStatus;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
-import javax.persistence.*;
-import java.math.BigDecimal;
-
-@Entity
-@Table(name = "Ticket", uniqueConstraints = @UniqueConstraint(name = "OrderIdAndStatus", columnNames = {"orderId", "status"}))
-@NamedQueries({
-        @NamedQuery(name = "Ticket.findByOrderAndStatus", query = "SELECT t FROM Ticket t where t.orderId = ?1 and t.status = ?2"),
-        @NamedQuery(name = "Ticket.findByAccountAndStatus", query = "SELECT t FROM Ticket t where t.accountId = ?1 and t.status = ?2"),
-})
-public class Ticket extends PanacheEntityBase {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
+@RegisterForReflection
+public class TicketDTO {
     private Long id;
-
-    @Column(nullable = false)
     private String orderId;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
     private TicketStatus status;
-
-    @Column(nullable = false)
     private String accountId;
-
     private String name;
-
     private String numberOfPersons;
-
-    private BigDecimal cost;
-
-    @Transient
+    private String cost;
     private String messageOnTicket;
-
-    @Transient
     private String messageSeverity;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getOrderId() {
         return orderId;
@@ -88,11 +55,11 @@ public class Ticket extends PanacheEntityBase {
         this.numberOfPersons = numberOfPersons;
     }
 
-    public BigDecimal getCost() {
+    public String getCost() {
         return cost;
     }
 
-    public void setCost(BigDecimal cost) {
+    public void setCost(String cost) {
         this.cost = cost;
     }
 
@@ -110,5 +77,13 @@ public class Ticket extends PanacheEntityBase {
 
     public void setMessageSeverity(String messageSeverity) {
         this.messageSeverity = messageSeverity;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
