@@ -3,17 +3,35 @@ package com.tanzhu.quarkus.microservices.resource.model;
 import com.tanzhu.quarkus.microservices.model.TicketStatus;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
+import java.math.BigDecimal;
+
 @RegisterForReflection
-public class TicketDTO {
+public class TicketResponseDTO {
     private Long id;
+
     private String orderId;
+
     private TicketStatus status;
+
     private String accountId;
+
     private String name;
+
     private String numberOfPersons;
-    private String cost;
+
+    private BigDecimal cost;
+
     private String messageOnTicket;
+
     private String messageSeverity;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getOrderId() {
         return orderId;
@@ -55,11 +73,11 @@ public class TicketDTO {
         this.numberOfPersons = numberOfPersons;
     }
 
-    public String getCost() {
+    public BigDecimal getCost() {
         return cost;
     }
 
-    public void setCost(String cost) {
+    public void setCost(BigDecimal cost) {
         this.cost = cost;
     }
 
@@ -77,13 +95,5 @@ public class TicketDTO {
 
     public void setMessageSeverity(String messageSeverity) {
         this.messageSeverity = messageSeverity;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }

@@ -2,7 +2,7 @@ package com.tanzhu.quarkus.microservices.util;
 
 import com.tanzhu.quarkus.microservices.model.Ticket;
 import com.tanzhu.quarkus.microservices.model.TicketStatus;
-import com.tanzhu.quarkus.microservices.resource.model.TicketDTO;
+import com.tanzhu.quarkus.microservices.resource.model.TicketRequestDTO;
 
 import java.math.BigDecimal;
 
@@ -35,8 +35,8 @@ public class TestData {
         ticket.setName(name);
         return ticket;
     }
-    public static TicketDTO generateDummyTicketDTO(String orderId, String accountId, String name, String numberOfPersons, String cost) {
-        TicketDTO ticket = new TicketDTO();
+    public static TicketRequestDTO generateDummyTicketDTO(String orderId, String accountId, String name, String numberOfPersons, String cost) {
+        TicketRequestDTO ticket = new TicketRequestDTO();
         ticket.setOrderId(orderId);
         ticket.setAccountId(accountId);
         ticket.setName(name);
