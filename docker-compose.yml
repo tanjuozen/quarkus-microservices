@@ -48,7 +48,7 @@ services:
     build:
       context: debezium
       args:
-        DEBEZIUM_VERSION: "${DEBEZIUM_CONNECTOR_VERSION:-1.9.5.Final}"
+        DEBEZIUM_VERSION: "${DEBEZIUM_CONNECTOR_VERSION:-2.0.0.Final}"
         STRIMZI_VERSION: "${STRIMZI_VERSION:-0.30.0-kafka-3.1.0}"
     ports:
       - 8083:8083
@@ -79,7 +79,7 @@ services:
       - JAEGER_SAMPLER_PARAM=1
       - STRIMZI_TRACING=jaeger
     command: /opt/kafka/kafka_connect_run.sh
-  tickets-service:
+  ticket-service:
     image: quarkus/ticket-service:1.0.0-SNAPSHOT
     build:
       context: ticket-service
@@ -101,4 +101,23 @@ services:
         condition: service_healthy
       connect:
         condition: service_started
-    command: "./application"
+    command: "./application -Dquarkus.profile=prod"
+  account-service:
+    image: quarkus/account-service:1.0.0-SNAPSHOT
+    build:
+      context: account-service
+      dockerfile: src/main/docker/Dockerfile.${QUARKUS_BUILD:-jvm}
+    links:
+      - kafka
+      - jaeger
+    environment:
+      - JAEGER_SERVICE_NAME=account-service
+      - JAEGER_SAMPLER_TYPE=const
+      - JAEGER_SAMPLER_PARAM=1
+      - JAEGER_AGENT_HOST=jaeger
+    depends_on:
+#      tickets-db:
+#        condition: service_healthy
+      connect:
+        condition: service_started
+    command: "./application -Dquarkus.profile=prod"
